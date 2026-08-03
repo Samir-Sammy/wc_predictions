@@ -591,9 +591,9 @@ try {
         ctx.beginPath(); ctx.moveTo(x.getPixelForValue(meanStd),a.top); ctx.lineTo(x.getPixelForValue(meanStd),a.bottom); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(a.left,y.getPixelForValue(meanPpm)); ctx.lineTo(a.right,y.getPixelForValue(meanPpm)); ctx.stroke();
         ctx.setLineDash([]); ctx.fillStyle='rgba(154,154,163,.55)'; ctx.font='8.5px IBM Plex Mono';
-        ctx.fillText('RELIABLE & STRONG', a.left+6, a.top+11);
+        ctx.fillText('CONSISTENT & STRONG', a.left+6, a.top+11);
         ctx.fillText('HIGH RISK, HIGH REWARD', a.right-134, a.top+11);
-        ctx.fillText('RELIABLE BUT LOW', a.left+6, a.bottom-5);
+        ctx.fillText('CONSISTENT BUT BELOW AVG', a.left+6, a.bottom-5);
         ctx.fillText('INCONSISTENT & LOW', a.right-112, a.bottom-5);
         ctx.restore();
       }
