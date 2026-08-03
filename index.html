@@ -275,20 +275,20 @@ document.querySelectorAll('.tab').forEach(btn=>{
 
 /* ---------- standings (form table) ---------- */
 document.getElementById('standingsTable').innerHTML =
- `<tr><th>#</th><th>Player</th><th>P</th><th>3s</th><th>2s</th><th>1s</th><th>0s</th><th>Pts</th><th>Hit %</th><th class="hide-mobile">Mix</th></tr>` +
+ `<tr><th>#</th><th>Player</th><th class="hide-mobile">P</th><th class="hide-mobile">3s</th><th class="hide-mobile">2s</th><th class="hide-mobile">1s</th><th class="hide-mobile">0s</th><th>Pts</th><th>Hit %</th><th>Mix</th></tr>` +
  M.summary.map((s,i)=>{
    const n=s.preds, seg=k=>(s[k]/n*100).toFixed(1);
    return `<tr class="${i===0?'champ':''}">
      <td class="rankcell">${String(i+1).padStart(2,'0')}</td>
      <td style="font-weight:600">${s.name}</td>
-     <td>${s.preds}</td>
-     <td>${s.p3}</td>
-     <td>${s.p2}</td>
-     <td>${s.p1}</td>
-     <td>${s.p0}</td>
+     <td class="hide-mobile">${s.preds}</td>
+     <td class="hide-mobile">${s.p3}</td>
+     <td class="hide-mobile">${s.p2}</td>
+     <td class="hide-mobile">${s.p1}</td>
+     <td class="hide-mobile">${s.p0}</td>
      <td class="ptcell">${s.total}</td>
      <td>${s.outcome_rate}%</td>
-     <td class="hide-mobile"><span class="dist" title="3s:${s.p3} 2s:${s.p2} 1s:${s.p1} 0s:${s.p0}">
+     <td><span class="dist" title="3s:${s.p3} 2s:${s.p2} 1s:${s.p1} 0s:${s.p0}">
        <i class="d3" style="width:${seg('p3')}%"></i><i class="d2" style="width:${seg('p2')}%"></i>
        <i class="d1" style="width:${seg('p1')}%"></i><i class="d0" style="width:${seg('p0')}%"></i></span></td>
    </tr>`;
@@ -459,11 +459,12 @@ const awards=[
   {t:'Champion', who:S[0].name, why:`${S[0].total} pts. Held #1 for 79 of 104 matches across 38 days. Next closest held it for 32 matches.`},
   {t:'Most Volatile', who:chaos.name, why:`Highest volatility (σ ${chaos.std.toFixed(2)}). All 3s and 0s, no in-between.`},
   {t:'Most Efficient', who:'Zikof & Narco Ziko', why:`Both at 0.99 pts per match. Zikof from 96 predictions, Narco Ziko from 89.`},
-  {t:'Best Exact Rate', who:bestExact.name, why:`${bestExact.exact_rate}% exact scorelines (${bestExact.p3} bullseyes).`},
+  {t:'Best Exact Rate', who:bestExact.name, why:`${bestExact.exact_rate}% accuracy with ${bestExact.p3} exact scorelines — most in the league.`},
   {t:'Biggest Climber', who:'Arabian Legend', why:`Rose from #8 to #3 — a 5-spot climb fueled by the league\u2019s best exact rate.`},
-  {t:'Hottest Streak', who:bestRun.name, why:`${bestRun.best_run} pts in a 10-match stretch.`},
+  {t:'Best Streak', who:bestRun.name, why:`${bestRun.best_run} pts in a 10-match stretch.`},
   {t:'Smartest Contrarian', who:boldAcc[0], why:`${boldAcc[1].contrarian_right}/${boldAcc[1].contrarian} correct when defying the room.`},
   {t:'Least Volatile', who:steadiest.name, why:`Lowest volatility (σ ${steadiest.std.toFixed(2)}). Never spectacular, never terrible.`},
+  {t:'Part-Timer', who:'Roque', why:`Only predicted 70 of 104 matches but still averaged 0.91 pts/match.`},
   {t:'Worst Revisioner', who:flipVictim[0], why:`${flipVictim[1].net} net pts from changing picks. First instinct was right.`},
   {t:'Best Revisioner', who:flipKing[0], why:`Changed ${flipKing[1].matches_changed} picks for a net +${flipKing[1].net} pts.`},
   {t:'Biggest Contrarian', who:bold[0], why:`Defied group consensus ${bold[1].contrarian} times (right ${bold[1].contrarian_right}×).`},
@@ -473,7 +474,7 @@ document.getElementById('awardCards').innerHTML = awards.map(a=>
 
 /* ---------- tooltip handler ---------- */
 const tipbox = document.getElementById('tipbox');
-document.addEventListener('click', e=>{
+document.addEventListener('mouseover', e=>{
   const tip = e.target.closest('.tip');
   if(tip){
     const r = tip.getBoundingClientRect();
@@ -481,9 +482,10 @@ document.addEventListener('click', e=>{
     tipbox.style.display = 'block';
     tipbox.style.left = Math.min(r.left, window.innerWidth - 230) + 'px';
     tipbox.style.top = (r.top - tipbox.offsetHeight - 8) + 'px';
-  } else {
-    tipbox.style.display = 'none';
   }
+});
+document.addEventListener('mouseout', e=>{
+  if(e.target.closest('.tip')) tipbox.style.display = 'none';
 });
 
 /* ---------- charts ---------- */
