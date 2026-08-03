@@ -410,10 +410,10 @@ let regretFilter = null;
 function renderRegretDetail(){
   const filtered = regretFilter ? allRegrets.filter(r=>r.player===regretFilter) : allRegrets;
   document.getElementById('regretDetail').innerHTML =
-   `<tr><th>Player</th><th>Match</th><th>Had</th><th>Changed To</th><th>Lost</th></tr>` +
+   `<tr><th>Player</th><th style="text-align:left">Match</th><th>Had</th><th>Changed To</th><th>Lost</th></tr>` +
    filtered.map(r=>`<tr>
      <td>${r.player}</td>
-     <td style="font-size:11px">${r.match}</td>
+     <td style="font-size:11px;text-align:left">${r.match}</td>
      <td class="net-pos">${r.first_pick}</td>
      <td class="net-neg">${r.final_pick}</td>
      <td class="net-neg">-${r.pts_lost}</td>
@@ -591,10 +591,10 @@ try {
         ctx.beginPath(); ctx.moveTo(x.getPixelForValue(meanStd),a.top); ctx.lineTo(x.getPixelForValue(meanStd),a.bottom); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(a.left,y.getPixelForValue(meanPpm)); ctx.lineTo(a.right,y.getPixelForValue(meanPpm)); ctx.stroke();
         ctx.setLineDash([]); ctx.fillStyle='rgba(154,154,163,.55)'; ctx.font='8.5px IBM Plex Mono';
-        ctx.fillText('STEADY · GOOD', a.left+6, a.top+11);
-        ctx.fillText('BOOM-BUST · GOOD', a.right-100, a.top+11);
-        ctx.fillText('STEADY · ROUGH', a.left+6, a.bottom-5);
-        ctx.fillText('CHAOS', a.right-38, a.bottom-5);
+        ctx.fillText('RELIABLE & STRONG', a.left+6, a.top+11);
+        ctx.fillText('HIGH RISK, HIGH REWARD', a.right-134, a.top+11);
+        ctx.fillText('RELIABLE BUT LOW', a.left+6, a.bottom-5);
+        ctx.fillText('INCONSISTENT & LOW', a.right-112, a.bottom-5);
         ctx.restore();
       }
     }]
