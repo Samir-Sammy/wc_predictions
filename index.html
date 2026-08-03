@@ -55,6 +55,9 @@ h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
 .stat-card{flex:1;min-width:70px;text-align:center;padding:12px 8px;background:var(--card);border:1px solid var(--border);border-radius:12px}
 .stat-card .sv{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
 .stat-card .sl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--dim);font-size:9px;color:var(--dim);cursor:help;vertical-align:middle;margin-left:3px}
+.tip:hover{color:var(--text);border-color:var(--text)}
+.tipbox{position:fixed;background:#1c1c21;border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:400;padding:10px 12px;border-radius:8px;width:220px;line-height:1.4;z-index:100;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.5);display:none}
 .dist-chart{position:relative;height:260px;margin:8px 0}
 .dist-chart svg{width:100%;height:100%}
 
@@ -220,6 +223,8 @@ footer{padding:28px 0 12px;color:var(--dim);font-family:'IBM Plex Mono',monospac
 </div>
 
 
+<div class="tipbox" id="tipbox"></div>
+
 <nav class="tabbar" role="tablist">
   <div class="tabbar-inner">
     <button class="tab active" data-tab="season" role="tab" aria-selected="true">Season</button>
@@ -291,7 +296,7 @@ document.getElementById('standingsTable').innerHTML =
 
 /* ---------- player stats table ---------- */
 document.getElementById('statsTable').innerHTML =
- `<tr><th>Player</th><th>Preds</th><th>Pts/Match</th><th>Std Dev</th><th>Exact %</th><th>Peak 10</th></tr>` +
+ `<tr><th>Player</th><th>Preds</th><th>Pts/Match</th><th>Std Dev</th><th>Exact %</th><th>Peak (10) <span class="tip" data-tip="Highest total points scored in any 10 consecutive matches. Max possible = 30.">?</span></th></tr>` +
  M.summary.map(s=>{
    return `<tr>
      <td>${s.name}</td>
@@ -465,6 +470,21 @@ const awards=[
 ];
 document.getElementById('awardCards').innerHTML = awards.map(a=>
   `<div class="award"><div class="t">${a.t}</div><div class="who">${a.who}</div><div class="why">${a.why}</div></div>`).join('');
+
+/* ---------- tooltip handler ---------- */
+const tipbox = document.getElementById('tipbox');
+document.addEventListener('click', e=>{
+  const tip = e.target.closest('.tip');
+  if(tip){
+    const r = tip.getBoundingClientRect();
+    tipbox.textContent = tip.dataset.tip;
+    tipbox.style.display = 'block';
+    tipbox.style.left = Math.min(r.left, window.innerWidth - 230) + 'px';
+    tipbox.style.top = (r.top - tipbox.offsetHeight - 8) + 'px';
+  } else {
+    tipbox.style.display = 'none';
+  }
+});
 
 /* ---------- charts ---------- */
 function chartFail(id){
