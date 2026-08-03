@@ -61,7 +61,10 @@ h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
 .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
 .chartbox{position:relative;height:420px}
 .chartbox.short{height:340px}
-@media(max-width:480px){.chartbox{height:360px}.chartbox.short{height:300px}}
+@media(max-width:480px){.chartbox{height:360px}.chartbox.short{height:300px}
+.hide-mobile{display:none}
+.standings td,.standings th{padding:9px 5px;font-size:12px}
+}
 .hint{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--dim);margin-top:10px;text-align:center}
 
 /* custom race legend */
@@ -84,8 +87,8 @@ h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
 .flip{width:100%;border-collapse:collapse;font-size:12.5px}
 .flip th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:right;padding:6px 6px;border-bottom:1px solid var(--border)}
 .flip th:first-child{text-align:left}
-.flip td{padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;font-variant-numeric:tabular-nums}
-.flip td:first-child{text-align:left;font-weight:600}
+.flip td{padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.flip td:first-child{text-align:left;white-space:normal;font-weight:600}
 .net-pos{color:var(--green);font-weight:700}
 .net-neg{color:var(--red);font-weight:700}
 
@@ -194,6 +197,8 @@ footer{padding:28px 0 12px;color:var(--dim);font-family:'IBM Plex Mono',monospac
     <h2>Changed Away From The Upset</h2>
     <p class="lede">Players who had the right upset pick but changed it before kickoff — and how many points it cost them.</p>
     <div style="overflow-x:auto"><table class="flip" id="regretSummary"></table></div>
+    <h2 style="margin-top:32px">Upset Revision Details</h2>
+    <p class="lede">Every individual pick that was changed away from a correct upset call. Filter by player below.</p>
     <div class="racelegend" id="regretFilter" style="margin:14px 0"></div>
     <div style="overflow-x:auto"><table class="flip" id="regretDetail"></table></div>
   </div>
@@ -265,7 +270,7 @@ document.querySelectorAll('.tab').forEach(btn=>{
 
 /* ---------- standings (form table) ---------- */
 document.getElementById('standingsTable').innerHTML =
- `<tr><th>#</th><th>Player</th><th>P</th><th>3s</th><th>2s</th><th>1s</th><th>0s</th><th>Pts</th><th>Hit %</th><th>Mix</th></tr>` +
+ `<tr><th>#</th><th>Player</th><th>P</th><th>3s</th><th>2s</th><th>1s</th><th>0s</th><th>Pts</th><th>Hit %</th><th class="hide-mobile">Mix</th></tr>` +
  M.summary.map((s,i)=>{
    const n=s.preds, seg=k=>(s[k]/n*100).toFixed(1);
    return `<tr class="${i===0?'champ':''}">
@@ -278,7 +283,7 @@ document.getElementById('standingsTable').innerHTML =
      <td>${s.p0}</td>
      <td class="ptcell">${s.total}</td>
      <td>${s.outcome_rate}%</td>
-     <td><span class="dist" title="3s:${s.p3} 2s:${s.p2} 1s:${s.p1} 0s:${s.p0}">
+     <td class="hide-mobile"><span class="dist" title="3s:${s.p3} 2s:${s.p2} 1s:${s.p1} 0s:${s.p0}">
        <i class="d3" style="width:${seg('p3')}%"></i><i class="d2" style="width:${seg('p2')}%"></i>
        <i class="d1" style="width:${seg('p1')}%"></i><i class="d0" style="width:${seg('p0')}%"></i></span></td>
    </tr>`;
